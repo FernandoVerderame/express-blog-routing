@@ -108,17 +108,20 @@ const create = (req, res) => {
 }
 
 // Funzione per il download delle immagini dei post
-const download = (req, res) => {
-    // Recupero lo slug dai parametri
-    const requestPostSlug = req.params.slug;
-
-    // Provo a cercare se tra gli slug dei posts esiste una relazione
-    const requestPost = posts.find(post => post.slug === requestPostSlug);
-
-    // Costruisco il path assoluto per il download dell'immagine
-    const imageAbsolutePath = path.join(__dirname, `../public/posts ${requestPost.image}`);
-
-    res.download(imageAbsolutePath);
+const file = (sendMethod) => {
+    return (req, res) => {
+        const slug = req.params.slug;
+        const post = posts.find(post => post.slug === slug)
+        const filePath = path.join(__dirname, `../public/${post.image}`);
+        const extension = path.extname(filePath);
+        if (extension !== '.jpeg') {
+            res.status(400).send(`You are not allowed to access ${extension} files.`);
+        } else if (fs.existsSync(filePath)) {
+            res[sendMethod](filePath);
+        } else {
+            res.status(404).send('File not found.');
+        }
+    }
 }
 
 // Esporto i moduli
@@ -126,5 +129,5 @@ module.exports = {
     index,
     show,
     create,
-    download
+    file
 }

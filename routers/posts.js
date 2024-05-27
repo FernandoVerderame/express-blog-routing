@@ -17,7 +17,7 @@ router.get("/create", postsControllers.create);
 router.get("/:slug", postsControllers.show);
 
 // Rotta per il download delle immagini
-router.get("/:slug/download", postsControllers.download)
+router.get("/:slug/download", postsControllers.file('download'));
 
 // Esporto l'istanza di router
 module.exports = router;
