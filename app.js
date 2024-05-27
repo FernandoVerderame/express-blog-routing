@@ -10,6 +10,9 @@ const app = express();
 // Definisco le variabili port
 const port = process.env.PORT || 3000;
 
+// Definisco la cartella public
+app.use(express.static('public'));
+
 // Rotta base
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname, './welcome.html');
