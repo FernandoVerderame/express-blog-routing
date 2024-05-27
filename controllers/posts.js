@@ -16,7 +16,7 @@ const index = (req, res) => {
         // Logica HTML
         html: () => {
             let html = '<ul>';
-            posts.forEach(({ title, content, image, tags }) => {
+            posts.forEach(({ title, content, image, tags, slug }) => {
                 html += `
                 <li>
                     <div>
@@ -24,6 +24,7 @@ const index = (req, res) => {
                         <img width="300" height="200" src="/${image}" alt="${title}"/>
                         <p>${content}</p>
                         <p>${tags.map(t => `<strong><span class="tag">#${t}<span></strong>`).join(' ')}</p>
+                        <a href="http://${req.headers.host}/posts/${slug}">Visualizza immagine</a>
                     </div>
                 </li>
                 `
@@ -63,6 +64,9 @@ const show = (req, res) => {
                         <img width="300" height="200" src="/${p.image}" alt="${p.title}"/>
                         <p>${p.content}</p>
                         <p>${p.tags.map(t => `<strong><span class="tag">#${t}<span></strong>`).join(' ')}</p>
+                        <a href="http://${req.headers.host}/${requestPost.image}">Visualizza immagine</a>
+                        <a href="http://${req.headers.host}/posts/${requestPost.slug}/download">Download immagine</a>
+                        <a href="http://${req.headers.host}/posts">Torna indietro</a>
                     </div>
                 `);
             } else {
@@ -79,7 +83,8 @@ const show = (req, res) => {
             if (requestPost) {
                 res.json({
                     ...requestPost,
-                    image_url: `http://${req.headers.host}/${requestPost.image}`
+                    image_url: `http://${req.headers.host}/${requestPost.image}`,
+                    image_download_url: `http://${req.headers.host}/posts/${requestPost.slug}/download`
                 });
             } else {
                 res.status(404).json({
