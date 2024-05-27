@@ -112,14 +112,18 @@ const file = (sendMethod) => {
     return (req, res) => {
         const slug = req.params.slug;
         const post = posts.find(post => post.slug === slug)
+
+        if (!post) {
+            res.status(404).send('File not found.');
+            return;
+        }
+
         const filePath = path.join(__dirname, `../public/${post.image}`);
         const extension = path.extname(filePath);
         if (extension !== '.jpeg') {
             res.status(400).send(`You are not allowed to access ${extension} files.`);
         } else if (fs.existsSync(filePath)) {
             res[sendMethod](filePath);
-        } else {
-            res.status(404).send('File not found.');
         }
     }
 }
