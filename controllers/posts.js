@@ -1,5 +1,8 @@
-// Importo gli utils
-const { fs, path } = require("../utils");
+// Importo il modulo File System
+const fs = require("fs");
+
+// Importo il modulo Path
+const path = require("path");
 
 // Importo i posts
 let posts = require("../db/posts.json");
@@ -104,9 +107,24 @@ const create = (req, res) => {
     });
 }
 
+// Funzione per il download delle immagini dei post
+const download = (req, res) => {
+    // Recupero lo slug dai parametri
+    const requestPostSlug = req.params.slug;
+
+    // Provo a cercare se tra gli slug dei posts esiste una relazione
+    const requestPost = posts.find(post => post.slug === requestPostSlug);
+
+    // Costruisco il path assoluto per il download dell'immagine
+    const imageAbsolutePath = path.join(__dirname, `../public/posts ${requestPost.image}`);
+
+    res.download(imageAbsolutePath);
+}
+
 // Esporto i moduli
 module.exports = {
     index,
     show,
-    create
+    create,
+    download
 }
