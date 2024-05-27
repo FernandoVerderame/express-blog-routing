@@ -8,7 +8,10 @@ const router = express.Router();
 const postsControllers = require("../controllers/posts.js");
 
 // Index dei Posts
-router.get('/', postsControllers.index);
+router.get("/", postsControllers.index);
+
+// Creazione di un Post
+router.get("/create", postsControllers.create);
 
 // Show dei posts
 router.get("/:slug", postsControllers.show);

@@ -9,8 +9,9 @@ const index = (req, res) => {
 
     // Content negotiation
     res.format({
+
+        // Logica HTML
         html: () => {
-            // Logica HTML
             let html = '<ul>';
             posts.forEach(({ title, content, image, tags }) => {
                 html += `
@@ -27,8 +28,9 @@ const index = (req, res) => {
             html += '</ul>';
             res.send(html);
         },
+
+        // Logica JSON
         json: () => {
-            // Logica JSON
             res.json({
                 data: posts,
                 count: posts.length
@@ -45,8 +47,10 @@ const show = (req, res) => {
     // Provo a cercare se tra gli slug dei posts esiste una relazione
     const requestPost = posts.find(post => post.slug === requestPostSlug);
 
-    //Logica HTML
+
     res.format({
+
+        //Logica HTML
         html: () => {
             if (requestPost) {
                 const p = requestPost;
@@ -84,8 +88,25 @@ const show = (req, res) => {
     });
 }
 
+// Funzione per la creazione di un nuovo post
+const create = (req, res) => {
+    res.format({
+
+        // Logica HTML
+        html: () => {
+            res.send('<h1>Creazione nuovo post</h1>');
+        },
+
+        // Altri casi
+        default: () => {
+            res.status(406).send('<h1>Not Acceptable</h1>');
+        }
+    });
+}
+
 // Esporto i moduli
 module.exports = {
     index,
-    show
+    show,
+    create
 }
